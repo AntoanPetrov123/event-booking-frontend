@@ -6,6 +6,7 @@ import Events from '../pages/Events/Events';
 import EventDetails from '../pages/Events/EventDetails';
 import Login from '../pages/Auth/Login';
 import Register from '../pages/Auth/Register';
+import User from '../pages/Auth/User';
 
 export const router = createBrowserRouter([
   {
@@ -22,6 +23,10 @@ export const router = createBrowserRouter([
       {
         path: '/events/:id',
         element: <EventDetails />,
+      },
+      {
+        path: '/my-profile/:id',
+        element: <User />,
       },
       {
         path: '/login',
