@@ -4,18 +4,31 @@ import CustomButton from "../../components/FormElements/Buttons/CustomButton";
 import CustomInput from "../../components/FormElements/Input/CustomInput";
 
 import "./Auth.css";
+import { useDispatch } from "react-redux";
+import type { AppDispatch } from "../../store/store";
+import { useNavigate } from "react-router-dom";
+import { login } from "../../store/auth/authActions";
 
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const handleSubmit = (event) => {
-    event.preventDefault();
+  const dispatch = useDispatch<AppDispatch>();
+  const navigate = useNavigate();
 
-    console.log({
-      email,
-      password,
-    });
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    
+    const result = await dispatch(
+      login({
+        email,
+        password,
+      })
+    );
+    
+    if (login.fulfilled.match(result)) {
+      navigate("/");
+    }
   };
 
   return (

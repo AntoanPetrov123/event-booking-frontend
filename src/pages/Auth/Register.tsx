@@ -4,6 +4,10 @@ import CustomButton from "../../components/FormElements/Buttons/CustomButton";
 import CustomInput from "../../components/FormElements/Input/CustomInput";
 
 import "./Auth.css";
+import { register } from "../../store/auth/authActions";
+import { useDispatch } from "react-redux";
+import type { AppDispatch } from "../../store/store";
+import { useNavigate } from "react-router-dom";
 
 const Register = () => {
   const [firstName, setFirstName] = useState("");
@@ -11,21 +15,29 @@ const Register = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+  const dispatch = useDispatch<AppDispatch>();
+  const navigate = useNavigate();
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
-  
+
     if (password !== confirmPassword) {
       console.log("Passwords do not match");
       return;
     }
-  
-    console.log({
-      firstName,
-      lastName,
-      email,
-      password,
-    });
+
+    const result = await dispatch(
+      register({
+        firstName,
+        lastName,
+        email,
+        password,
+      })
+    );
+
+    if (register.fulfilled.match(result)) {
+      navigate("/");
+    }
   };
 
   return (
@@ -85,11 +97,7 @@ const Register = () => {
             onChange={(event) => setConfirmPassword(event.target.value)}
           />
 
-          <CustomButton
-            type="submit"
-            variant="primary"
-            fullWidth
-          >
+          <CustomButton type="submit" variant="primary" fullWidth>
             Register
           </CustomButton>
         </form>
