@@ -5,6 +5,16 @@ import {
     getEvents 
 } from "./eventsActions";
 
+export type EventTicket = {
+    id: number;
+    name: string;
+    description: string;
+    price: number;
+    discountPrice: number | null;
+    totalPlaces: number;
+    usedPlaces: number;
+}
+
 export type Event = {
   id: number;
   title: string;
@@ -17,6 +27,7 @@ export type Event = {
   endTime: string;
   image: string | null;
   status: string;
+  tickets: EventTicket[];
 };
 
 export type EventItem = {
@@ -57,6 +68,7 @@ const initialState: EventsState = {
     endTime: '',
     image: null,
     status: '',
+    tickets: []
   },
   events: {
     data: [],

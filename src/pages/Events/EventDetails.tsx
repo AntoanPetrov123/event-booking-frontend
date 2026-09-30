@@ -6,6 +6,7 @@ import type { AppDispatch, RootState } from "../../store/store";
 import { getEvent } from "../../store/events/eventsActions";
 
 import "./EventDetails.css";
+import CustomButton from "../../components/FormElements/Buttons/CustomButton";
 
 const EventDetails = () => {
   const { id } = useParams();
@@ -70,7 +71,7 @@ const EventDetails = () => {
         <section className="event-details__section">
           <h2>Tickets</h2>
 
-          {/* <div className="ticket-types">
+          <div className="ticket-types">
             {event.tickets.map((ticket) => (
               <div
                 key={ticket.id}
@@ -93,7 +94,7 @@ const EventDetails = () => {
                 </div>
               </div>
             ))}
-          </div> */}
+          </div>
         </section>
       </div>
     </div>
@@ -116,6 +117,7 @@ const EventDetails = () => {
   //   tickets: [
   //     {
   //       id: 1,
+  //       eventId: 2
   //       name: "Front Rows",
   //       description: "Rows 1-4",
   //       price: 120,
