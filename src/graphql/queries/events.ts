@@ -14,6 +14,15 @@ export const GET_EVENT = gql`
       endTime
       image
       status
+      tickets {
+        id
+        name
+        description
+        price
+        discountPrice
+        totalPlaces
+        usedPlaces
+      }
     }
   }
 `;
