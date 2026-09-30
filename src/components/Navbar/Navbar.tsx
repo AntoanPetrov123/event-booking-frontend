@@ -49,6 +49,14 @@ const Navbar = () => {
         <div className="navbar__actions">
           {isAuthenticated ? (
             <>
+              <NavLink
+                to="/user/cart"
+                className={({ isActive }) =>
+                  isActive ? "navbar__link active" : "navbar__link"
+                }
+              >
+                Cart
+              </NavLink>
               <span className="navbar__user">
                 {user?.firstName}
               </span>
