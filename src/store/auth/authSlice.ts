@@ -1,6 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 
-import { login, register } from "./authActions";
+import { checkAuth, login, register } from "./authActions";
 
 type User = {
   id: number;
@@ -74,6 +74,19 @@ const authSlice = createSlice({
           "accessToken",
           action.payload.accessToken
         );
+      })
+      
+      .addCase(checkAuth.fulfilled, (state, action) => {
+        state.user = action.payload;
+        state.isAuthenticated = true;
+      })
+      
+      .addCase(checkAuth.rejected, (state) => {
+        state.user = null;
+        state.accessToken = null;
+        state.isAuthenticated = false;
+      
+        localStorage.removeItem("accessToken");
       });
   },
 });

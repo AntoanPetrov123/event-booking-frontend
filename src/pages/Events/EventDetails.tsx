@@ -20,7 +20,7 @@ const EventDetails = () => {
       dispatch(getEvent(Number(id)));
     }
   }, [id, dispatch]);
-
+  
   if (loading) {
     return <p>Loading...</p>;
   }

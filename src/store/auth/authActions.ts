@@ -2,6 +2,7 @@ import { createAsyncThunk } from "@reduxjs/toolkit";
 
 import { apolloClient } from "../../graphql/client";
 import { LOGIN, REGISTER } from "../../graphql/mutations/auth";
+import { GET_ME } from "../../graphql/queries/auth";
 
 
 type LoginInput = {
@@ -45,5 +46,21 @@ export const register = createAsyncThunk(
         });
   
         return data?.register;
+    }
+);
+
+export const checkAuth = createAsyncThunk(
+    "auth/checkAuth",
+    async (_, { rejectWithValue }) => {
+      try {
+        const { data } = await apolloClient.query({
+          query: GET_ME,
+          fetchPolicy: "network-only",
+        });
+  
+        return data?.me;
+      } catch {
+        return rejectWithValue("Invalid token");
+      }
     }
 );

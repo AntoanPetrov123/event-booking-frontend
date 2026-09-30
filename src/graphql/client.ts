@@ -3,12 +3,26 @@ import {
   HttpLink,
   InMemoryCache,
 } from "@apollo/client";
+import { SetContextLink } from "@apollo/client/link/context";
 
-const graphqlUrl = import.meta.env.VITE_GRAPHQL_URL;
+const httpLink = new HttpLink({
+  uri: import.meta.env.VITE_GRAPHQL_URL,
+});
+
+const authLink = new SetContextLink((prevContext) => {
+  const token = localStorage.getItem("accessToken");
+
+  return {
+    headers: {
+      ...prevContext.headers,
+      authorization: token
+        ? `Bearer ${token}`
+        : "",
+    },
+  };
+});
 
 export const apolloClient = new ApolloClient({
-  link: new HttpLink({
-    uri: graphqlUrl,
-  }),
+  link: authLink.concat(httpLink),
   cache: new InMemoryCache(),
 });

@@ -17,3 +17,25 @@ export const GET_EVENT = gql`
     }
   }
 `;
+
+export const GET_EVENTS = gql`
+  query getEvents($payload: GetEventsPayload!) {
+    getEvents(payload: $payload) {
+      data {
+        id
+        title
+        hall
+        city
+        startDate
+        endDate
+        startTime
+        endTime
+        image
+      }
+      total
+      page
+      itemsPerPage
+      totalPages
+    }
+  }
+`;

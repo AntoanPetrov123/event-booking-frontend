@@ -1,9 +1,24 @@
-import { NavLink } from 'react-router-dom';
+import { NavLink } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
 
-import CustomButton from '../FormElements/Buttons/CustomButton';
-import './Navbar.css';
+import CustomButton from "../FormElements/Buttons/CustomButton";
+
+import type { AppDispatch, RootState } from "../../store/store";
+import { logout } from "../../store/auth/authSlice";
+
+import "./Navbar.css";
 
 const Navbar = () => {
+  const dispatch = useDispatch<AppDispatch>();
+
+  const { isAuthenticated, user } = useSelector(
+    (state: RootState) => state.auth
+  );
+
+  const handleLogout = () => {
+    dispatch(logout());
+  };
+
   return (
     <nav className="navbar">
       <div className="navbar__container">
@@ -15,7 +30,7 @@ const Navbar = () => {
           <NavLink
             to="/"
             className={({ isActive }) =>
-              isActive ? 'navbar__link active' : 'navbar__link'
+              isActive ? "navbar__link active" : "navbar__link"
             }
           >
             Home
@@ -24,7 +39,7 @@ const Navbar = () => {
           <NavLink
             to="/events"
             className={({ isActive }) =>
-              isActive ? 'navbar__link active' : 'navbar__link'
+              isActive ? "navbar__link active" : "navbar__link"
             }
           >
             Events
@@ -32,13 +47,36 @@ const Navbar = () => {
         </div>
 
         <div className="navbar__actions">
-          <CustomButton to="/login" variant="secondary">
-            Login
-          </CustomButton>
+          {isAuthenticated ? (
+            <>
+              <span className="navbar__user">
+                {user?.firstName}
+              </span>
 
-          <CustomButton to="/register">
-            Register
-          </CustomButton>
+              <CustomButton
+                variant="secondary"
+                onClick={handleLogout}
+              >
+                Logout
+              </CustomButton>
+            </>
+          ) : (
+            <>
+              <CustomButton
+                to="/login"
+                variant="secondary"
+              >
+                Login
+              </CustomButton>
+
+              <CustomButton
+                to="/register"
+                variant="primary"
+              >
+                Register
+              </CustomButton>
+            </>
+          )}
         </div>
       </div>
     </nav>

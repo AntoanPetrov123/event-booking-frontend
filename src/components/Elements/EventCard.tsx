@@ -4,9 +4,10 @@ import "./EventCard.css";
 
 type EventCardProps = {
   id: number;
-  image: string;
+  image: string | null;
   title: string;
-  location: string;
+  city: string;
+  hall: string;
   startTime: string;
   endTime: string;
   startDate: string;
@@ -17,7 +18,8 @@ const EventCard = ({
   id,
   image,
   title,
-  location,
+  city,
+  hall,
   startTime,
   endTime,
   startDate,
@@ -36,9 +38,8 @@ const EventCard = ({
 
         <div className="event-card__info">
           <p className="event-card__info-item">
-            📍 {location}
+            📍 {city} / {hall}
           </p>
-
           <p className="event-card__info-item">
             📅 {startDate} - {endDate}
           </p>
