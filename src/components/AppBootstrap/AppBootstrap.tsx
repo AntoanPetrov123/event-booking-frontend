@@ -1,26 +1,47 @@
 import { useEffect } from "react";
-import type { ReactNode } from "react";
+
 import { useDispatch } from "react-redux";
 
 import type { AppDispatch } from "../../store/store";
+
 import { checkAuth } from "../../store/auth/authActions";
 
-type AppBootstrapProps = {
-  children: ReactNode;
-};
+import { hydrateCart, resetCartState } from "../../store/cart/cartSlice";
 
-const AppBootstrap = ({ children }: AppBootstrapProps) => {
+import { loadCart } from "../../store/cart/cartStorage";
+
+const AppBootstrap = ({ children }: { children: React.ReactNode }) => {
   const dispatch = useDispatch<AppDispatch>();
 
   useEffect(() => {
-    const token = localStorage.getItem("accessToken");
+    const bootstrap = async () => {
+      const token = localStorage.getItem("accessToken");
 
-    if (token) {
-      dispatch(checkAuth());
-    }
+      if (!token) {
+        dispatch(resetCartState());
+
+        return;
+      }
+
+      const result = await dispatch(checkAuth());
+
+      if (checkAuth.fulfilled.match(result)) {
+        const userId = result.payload.id;
+
+        const userCart = loadCart(userId);
+
+        dispatch(hydrateCart(userCart));
+
+        return;
+      }
+
+      dispatch(resetCartState());
+    };
+
+    bootstrap();
   }, [dispatch]);
 
-  return <>{children}</>;
+  return children;
 };
 
 export default AppBootstrap;

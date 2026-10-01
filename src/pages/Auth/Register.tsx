@@ -8,6 +8,8 @@ import { register } from "../../store/auth/authActions";
 import { useDispatch } from "react-redux";
 import type { AppDispatch } from "../../store/store";
 import { useNavigate } from "react-router-dom";
+import { hydrateCart } from "../../store/cart/cartSlice";
+import { loadCart } from "../../store/cart/cartStorage";
 
 const Register = () => {
   const [firstName, setFirstName] = useState("");
@@ -34,8 +36,17 @@ const Register = () => {
         password,
       })
     );
-
+    
     if (register.fulfilled.match(result)) {
+      const userId =
+        result.payload.user.id;
+    
+      dispatch(
+        hydrateCart(
+          loadCart(userId)
+        )
+      );
+    
       navigate("/");
     }
   };

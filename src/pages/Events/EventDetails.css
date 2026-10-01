@@ -322,3 +322,23 @@
 
   text-decoration: line-through;
 }
+
+.tickets-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+
+  margin-bottom: 20px;
+}
+
+.tickets-header h2 {
+  margin: 0;
+}
+
+@media (max-width: 600px) {
+  .tickets-header {
+    align-items: stretch;
+    flex-direction: column;
+  }
+}

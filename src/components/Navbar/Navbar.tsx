@@ -1,4 +1,4 @@
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 
 import CustomButton from "../FormElements/Buttons/CustomButton";
@@ -7,9 +7,11 @@ import type { AppDispatch, RootState } from "../../store/store";
 import { logout } from "../../store/auth/authSlice";
 
 import "./Navbar.css";
+import { resetCartState } from "../../store/cart/cartSlice";
 
 const Navbar = () => {
   const dispatch = useDispatch<AppDispatch>();
+  const navigate = useNavigate();
 
   const { isAuthenticated, user } = useSelector(
     (state: RootState) => state.auth
@@ -17,6 +19,10 @@ const Navbar = () => {
 
   const handleLogout = () => {
     dispatch(logout());
+  
+    dispatch(resetCartState());
+  
+    navigate("/login");
   };
 
   return (

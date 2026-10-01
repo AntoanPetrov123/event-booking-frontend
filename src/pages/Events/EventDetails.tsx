@@ -7,7 +7,6 @@ import { getEvent } from "../../store/events/eventsActions";
 
 import "./EventDetails.css";
 import CustomButton from "../../components/FormElements/Buttons/CustomButton";
-import type { EventTicket } from "../../store/events/eventsSlice";
 import { addToCart } from "../../store/cart/cartSlice";
 
 const EventDetails = () => {
@@ -24,11 +23,9 @@ const EventDetails = () => {
     (state: RootState) => state.events
   );
 
-  const { isAuthenticated } = useSelector(
-    (state: RootState) => state.auth
-  );
+  const { isAuthenticated } = useSelector((state: RootState) => state.auth);
 
-  const [ticketsCount, setTicketsCount] = useState<TicketCount[]>([]);
+  const [selectedTickets, setSelectedTickets] = useState<TicketCount[]>([]);
 
   useEffect(() => {
     if (id) {
@@ -38,29 +35,34 @@ const EventDetails = () => {
 
   useEffect(() => {
     if (!event?.tickets) return;
-  
-    const pendingTicketRaw =
-      sessionStorage.getItem("pendingTicket");
-  
-    const pendingTicket = pendingTicketRaw
-      ? JSON.parse(pendingTicketRaw)
+
+    const pendingTicketsRaw = sessionStorage.getItem("pendingTickets");
+
+    const pendingData = pendingTicketsRaw
+      ? JSON.parse(pendingTicketsRaw)
       : null;
-  
-    setTicketsCount(
-      event.tickets.map((ticket) => ({
-        ticketId: ticket.id,
-        ticketCount:
-          pendingTicket?.eventId === event.id &&
-          pendingTicket?.ticketId === ticket.id
-            ? pendingTicket.ticketCount
-            : 0,
-      }))
+
+      setSelectedTickets(
+      event.tickets.map((ticket) => {
+        const pendingTicket = pendingData?.tickets?.find(
+          (item: { ticketId: number; ticketCount: number }) =>
+            item.ticketId === ticket.id
+        );
+
+        return {
+          ticketId: ticket.id,
+          ticketCount:
+            pendingData?.eventId === event.id
+              ? pendingTicket?.ticketCount ?? 0
+              : 0,
+        };
+      })
     );
   }, [event?.tickets]);
 
   const getTicketCount = (ticketId: number) => {
     return (
-      ticketsCount.find((ticket) => ticket.ticketId === ticketId)
+      selectedTickets.find((ticket) => ticket.ticketId === ticketId)
         ?.ticketCount ?? 0
     );
   };
@@ -72,7 +74,7 @@ const EventDetails = () => {
   ) => {
     const availablePlaces = totalPlaces - usedPlaces;
 
-    setTicketsCount((prev) =>
+    setSelectedTickets((prev) =>
       prev.map((ticket) => {
         if (ticket.ticketId !== ticketId) {
           return ticket;
@@ -91,7 +93,7 @@ const EventDetails = () => {
   };
 
   const decreaseTicketCount = (ticketId: number) => {
-    setTicketsCount((prev) =>
+    setSelectedTickets((prev) =>
       prev.map((ticket) => {
         if (ticket.ticketId !== ticketId) {
           return ticket;
@@ -109,42 +111,55 @@ const EventDetails = () => {
     );
   };
 
-  const handleAddToCart = (
-    ticket: EventTicket,
-    ticketCount: number
-  ) => {
-    if (ticketCount <= 0) return;
-  
+  const handleAddToCart = () => {
+    const tickets = selectedTickets.filter(
+      (ticket) => ticket.ticketCount > 0
+    );
+
+    if (!tickets.length) {
+      return;
+    }
+
     if (!isAuthenticated) {
       sessionStorage.setItem(
-        "pendingTicket",
+        "pendingTickets",
         JSON.stringify({
           eventId: event.id,
-          ticketId: ticket.id,
-          ticketCount,
+          tickets: tickets,
         })
       );
-  
+
       navigate("/login", {
         state: {
           redirectTo: `/events/${event.id}`,
         },
       });
-  
+
       return;
     }
-  
-    dispatch(
-      addToCart({
-        ticketId: ticket.id,
-        eventId: event.id,
-        name: ticket.name,
-        price: ticket.discountPrice ?? ticket.price,
-        quantity: ticketCount,
-      })
-    );
-  
-    sessionStorage.removeItem("pendingTicket");
+
+    tickets.forEach((selectedTicket) => {
+      const ticket = event.tickets.find(
+        (ticket) => ticket.id === selectedTicket.ticketId
+      );
+
+      if (!ticket) {
+        return;
+      }
+
+      dispatch(
+        addToCart({
+          ticketId: ticket.id,
+          eventId: event.id,
+          name: ticket.name,
+          price: ticket.discountPrice ?? ticket.price,
+          quantity: selectedTicket.ticketCount,
+        })
+      );
+    });
+
+    setSelectedTickets([]);
+    sessionStorage.removeItem("pendingTickets");
   };
 
   if (loading) {
@@ -194,7 +209,17 @@ const EventDetails = () => {
         </section>
 
         <section className="event-details__section">
-          <h2>Tickets</h2>
+          <div className="tickets-header">
+            <h2>Tickets</h2>
+
+            <CustomButton
+              onClick={handleAddToCart}
+              variant="primary"
+              disabled={!selectedTickets.some((ticket) => ticket.ticketCount > 0)}
+            >
+              Add To Cart
+            </CustomButton>
+          </div>
 
           <div className="ticket-types">
             {event.tickets.map((ticket) => {
@@ -233,11 +258,11 @@ const EventDetails = () => {
                       {ticket.discountPrice ? (
                         <>
                           <span className="ticket-card__price-old">
-                          €{ticket.price}
+                            €{ticket.price}
                           </span>
 
                           <span className="ticket-card__price-current">
-                          €{ticket.discountPrice}
+                            €{ticket.discountPrice}
                           </span>
                         </>
                       ) : (
@@ -275,14 +300,6 @@ const EventDetails = () => {
                         +
                       </button>
                     </div>
-
-                    <CustomButton
-                      variant="primary"
-                      disabled={ticketCount === 0 || availablePlaces === 0}
-                      onClick={() => handleAddToCart(ticket, ticketCount)}
-                    >
-                      Add To Cart
-                    </CustomButton>
                   </div>
                 </div>
               );

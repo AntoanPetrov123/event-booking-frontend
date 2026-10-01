@@ -8,6 +8,9 @@ import { useDispatch } from "react-redux";
 import type { AppDispatch } from "../../store/store";
 import { useLocation, useNavigate } from "react-router-dom";
 import { login } from "../../store/auth/authActions";
+import { hydrateCart } from "../../store/cart/cartSlice";
+
+import { loadCart } from "../../store/cart/cartStorage";
 
 const Login = () => {
   const [email, setEmail] = useState("");
@@ -18,12 +21,11 @@ const Login = () => {
 
   const location = useLocation();
 
-  const redirectTo =
-    location.state?.redirectTo || "/";
+  const redirectTo = location.state?.redirectTo || "/";
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    
+
     const result = await dispatch(
       login({
         email,
@@ -32,9 +34,21 @@ const Login = () => {
     );
     
     if (login.fulfilled.match(result)) {
-      navigate(redirectTo);
+      const userId =
+        result.payload.user.id;
+    
+      const userCart =
+        loadCart(userId);
+    
+      dispatch(
+        hydrateCart(userCart)
+      );
+    
+      navigate(
+        redirectTo || "/"
+      );
     }
-  };
+  }
 
   return (
     <div className="auth-page">
