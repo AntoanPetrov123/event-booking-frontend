@@ -6,7 +6,7 @@ import CustomInput from "../../components/FormElements/Input/CustomInput";
 import "./Auth.css";
 import { useDispatch } from "react-redux";
 import type { AppDispatch } from "../../store/store";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { login } from "../../store/auth/authActions";
 
 const Login = () => {
@@ -15,6 +15,11 @@ const Login = () => {
 
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
+
+  const location = useLocation();
+
+  const redirectTo =
+    location.state?.redirectTo || "/";
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -27,7 +32,7 @@ const Login = () => {
     );
     
     if (login.fulfilled.match(result)) {
-      navigate("/");
+      navigate(redirectTo);
     }
   };
 
