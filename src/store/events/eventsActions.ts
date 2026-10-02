@@ -18,6 +18,7 @@ type GetEventsPagination = {
 };
 
 type GetEventsPayload = {
+  listKey: string;
   filter: GetEventsFilter;
   pagination: GetEventsPagination;
   search: string;
@@ -48,7 +49,7 @@ export const getEvents = createAsyncThunk(
       },
       fetchPolicy: "network-only",
     });
-
+    
     return data?.getEvents;
   }
 );

@@ -1,0 +1,168 @@
+.events-list {
+  width: 100%;
+}
+
+.events-list__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+
+  margin-bottom: 24px;
+}
+
+.events-list__title {
+  margin: 0 0 6px;
+
+  font-size: 28px;
+  font-weight: 700;
+
+  color: var(--color-text);
+}
+
+.events-list__subtitle {
+  margin: 0;
+
+  color: var(--color-text-secondary);
+}
+
+.events-list__toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  gap: 16px;
+
+  margin-bottom: 24px;
+}
+
+.events-list__search {
+  flex: 1;
+  max-width: 420px;
+}
+
+.events-list__search input {
+  width: 100%;
+  height: 42px;
+
+  padding: 0 14px;
+
+  border: 1px solid var(--color-border);
+  border-radius: 9px;
+
+  font-size: 14px;
+
+  outline: none;
+
+  background: #fff;
+}
+
+.events-list__search input:focus {
+  border-color: var(--color-primary);
+}
+
+.events-list__actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.events-list__popup-wrapper {
+  position: relative;
+}
+
+.events-list__grid {
+  display: grid;
+
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+
+  gap: 20px;
+}
+
+.events-list__loading,
+.events-list__empty,
+.events-list__error {
+  padding: 30px 0;
+
+  text-align: center;
+}
+
+.events-list__error {
+  color: var(--color-danger);
+}
+
+.events-list__pagination {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  gap: 14px;
+
+  margin-top: 30px;
+}
+
+.events-list__pagination-info {
+  font-size: 14px;
+
+  color: var(--color-text-secondary);
+}
+
+@media (max-width: 1100px) {
+  .events-list__grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 700px) {
+  .events-list__toolbar {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .events-list__search {
+    max-width: none;
+  }
+
+  .events-list__actions {
+    justify-content: flex-end;
+  }
+
+  .events-list__grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.events-list__grid-wrapper {
+  overflow: hidden;
+}
+
+.events-list__grid--right {
+  animation: events-slide-from-right 0.2s ease;
+}
+
+.events-list__grid--left {
+  animation: events-slide-from-left 0.2s ease;
+}
+
+@keyframes events-slide-from-right {
+  from {
+    opacity: 0;
+    transform: translateX(40px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes events-slide-from-left {
+  from {
+    opacity: 0;
+    transform: translateX(-40px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}

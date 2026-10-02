@@ -45,6 +45,7 @@ export const GET_EVENTS = gql`
       page
       itemsPerPage
       totalPages
+      listKey
     }
   }
 `;

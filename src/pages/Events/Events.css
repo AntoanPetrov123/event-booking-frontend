@@ -266,7 +266,7 @@
 .events-grid {
   display: grid;
 
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: 24px;
 }
 
@@ -299,7 +299,7 @@
 .events-pagination {
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: end;
   flex-wrap: wrap;
 
   gap: 8px;
@@ -328,23 +328,6 @@
     background-color 0.2s ease,
     border-color 0.2s ease,
     color 0.2s ease;
-}
-
-.events-pagination button:hover:not(:disabled):not(.active) {
-  border-color: var(--color-primary);
-  color: var(--color-primary);
-}
-
-.events-pagination button.active {
-  border-color: var(--color-primary);
-
-  background: var(--color-primary);
-  color: #ffffff;
-}
-
-.events-pagination button:disabled {
-  opacity: 0.4;
-  cursor: not-allowed;
 }
 
 /* Responsive */
