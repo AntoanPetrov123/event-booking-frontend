@@ -6,6 +6,7 @@ import CustomButton from "../../components/FormElements/Buttons/CustomButton";
 
 import "./MyCart.css";
 import { Link } from "react-router-dom";
+import { createCheckoutSession } from "../../store/cart/cartActions";
 
 const MyCart = () => {
   const dispatch = useDispatch<AppDispatch>();
@@ -17,6 +18,19 @@ const MyCart = () => {
     (total, item) => total + item.price * item.quantity,
     0
   );
+
+  const handleCheckout = async () => {
+    const checkoutItems = items.map((item) => ({
+      ticketId: item.ticketId,
+      quantity: item.quantity,
+    }));
+
+    const result = await dispatch(createCheckoutSession(checkoutItems));
+
+    if (createCheckoutSession.fulfilled.match(result)) {
+      window.location.href = result.payload.checkoutUrl;
+    }
+  };
 
   if (!items.length) {
     return (
@@ -123,7 +137,7 @@ const MyCart = () => {
             <span>€{totalPrice.toFixed(2)}</span>
           </div>
 
-          <CustomButton variant="primary" fullWidth>
+          <CustomButton variant="primary" fullWidth onClick={handleCheckout}>
             Continue to Checkout
           </CustomButton>
 

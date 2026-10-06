@@ -7,7 +7,7 @@
   justify-content: space-between;
   align-items: flex-end;
 
-  margin-bottom: 24px;
+  margin: 24px 0;
 }
 
 .events-list__title {

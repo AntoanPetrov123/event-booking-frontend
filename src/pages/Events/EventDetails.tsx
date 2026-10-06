@@ -70,9 +70,10 @@ const EventDetails = () => {
   const increaseTicketCount = (
     ticketId: number,
     totalPlaces: number,
-    usedPlaces: number
+    usedPlaces: number,
+    reservedPlaces: number,
   ) => {
-    const availablePlaces = totalPlaces - usedPlaces;
+    const availablePlaces = totalPlaces - usedPlaces - reservedPlaces;
 
     setSelectedTickets((prev) =>
       prev.map((ticket) => {
@@ -227,7 +228,7 @@ const EventDetails = () => {
 
               const availablePlaces = Math.max(
                 0,
-                ticket.totalPlaces - ticket.usedPlaces
+                ticket.totalPlaces - ticket.usedPlaces - ticket.reservedPlaces
               );
 
               return (
@@ -293,7 +294,8 @@ const EventDetails = () => {
                           increaseTicketCount(
                             ticket.id,
                             ticket.totalPlaces,
-                            ticket.usedPlaces
+                            ticket.usedPlaces,
+                            ticket.reservedPlaces,
                           )
                         }
                       >

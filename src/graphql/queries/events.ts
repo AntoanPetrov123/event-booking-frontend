@@ -22,6 +22,7 @@ export const GET_EVENT = gql`
         discountPrice
         totalPlaces
         usedPlaces
+        reservedPlaces
       }
     }
   }

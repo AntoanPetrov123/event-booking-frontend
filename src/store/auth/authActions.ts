@@ -20,8 +20,6 @@ type RegisterInput = {
 export const login = createAsyncThunk(
     "auth/login",
     async (input: LoginInput) => {
-        console.log(input);
-        
         const { data } = await apolloClient.mutate({
             mutation: LOGIN,
             variables: {

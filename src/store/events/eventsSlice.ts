@@ -10,6 +10,7 @@ export type EventTicket = {
   discountPrice: number | null;
   totalPlaces: number;
   usedPlaces: number;
+  reservedPlaces: number;
 };
 
 export type Event = {
@@ -94,6 +95,15 @@ const initialState: EventsState = {
         loading: false,
         error: null,
       },
+      plovdiv: {
+        data: [],
+        total: null,
+        page: null,
+        itemsPerPage: null,
+        totalPages: null,
+        loading: false,
+        error: null,
+      },
     },
   },
   loading: false,
@@ -131,17 +141,15 @@ const eventsSlice = createSlice({
       })
 
       .addCase(getEvents.fulfilled, (state, action) => {
-        const { listKey, data } = action.payload;
+        const { listKey, data, ...pagination } = action.payload;
         
         state.events.lists[listKey] = {
           ...state.events.lists[listKey],
-      
           data,
-          total: data.total,
-          page: data.page,
-          totalPages: data.totalPages,
-          itemsPerPage: data.itemsPerPage,
-      
+          total: pagination.total,
+          page: pagination.page,
+          totalPages: pagination.totalPages,
+          itemsPerPage: pagination.itemsPerPage,
           loading: false,
           error: null,
         };

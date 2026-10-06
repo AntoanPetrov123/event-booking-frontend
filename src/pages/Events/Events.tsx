@@ -15,8 +15,6 @@ const Events = () => {
           showSort
           itemsPerPage={4}
         />
-      </div>
-      <div className="events-page">
         <EventsList
           listKey="sofia"
           title="Events in Sofia"
@@ -26,6 +24,17 @@ const Events = () => {
           itemsPerPage={4}
           initialFilters={{
             city: "Sofia",
+          }}
+        />
+        <EventsList
+          listKey="plovdiv"
+          title="Events in Plovdiv"
+          showSearch={false}
+          showFilters={false}
+          showSort={false}
+          itemsPerPage={4}
+          initialFilters={{
+            city: "Plovdiv",
           }}
         />
       </div>
