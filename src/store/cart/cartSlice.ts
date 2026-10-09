@@ -100,6 +100,10 @@ import {
       resetCartState: (state) => {
         state.items = [];
       },
+
+      clearCart: (state) => {
+        state.items = [];
+      },
     },
   });
   
@@ -110,6 +114,7 @@ import {
     removeFromCart,
     hydrateCart,
     resetCartState,
+    clearCart,
   } = cartSlice.actions;
   
   export default cartSlice.reducer;

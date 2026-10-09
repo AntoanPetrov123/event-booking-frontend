@@ -10,8 +10,6 @@ type OrderInput = {
 export const createCheckoutSession = createAsyncThunk(
     "cart/createCheckoutSession",
     async (input: OrderInput[]) => {
-        console.log(input);
-        
         const { data } = await apolloClient.mutate({
             mutation: CREATE_CHECKOUT_SESSION,
             variables: {

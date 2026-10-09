@@ -8,6 +8,8 @@ import Login from '../pages/Auth/Login';
 import Register from '../pages/Auth/Register';
 import User from '../pages/Auth/User';
 import MyCart from '../pages/User/MyCart';
+import MyTickets from '../pages/User/MyTickets'
+import PaymentSuccess from '../pages/Payments/PaymentSuccess';
 
 export const router = createBrowserRouter([
   {
@@ -40,6 +42,14 @@ export const router = createBrowserRouter([
       {
         path: '/user/cart',
         element: <MyCart />
+      },
+      {
+        path: '/user/tickets',
+        element: <MyTickets />
+      },
+      {
+        path: '/payment/success',
+        element: <PaymentSuccess />
       }
     ],
   },

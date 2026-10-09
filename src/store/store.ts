@@ -6,12 +6,15 @@ import {
 
 import authReducer from "./auth/authSlice";
 import eventsReducer from "./events/eventsSlice";
+import paymentsReducer from "./payments/paymentsSlice";
+import usersReducer from "./users/usersSlice";
 
 import cartReducer, {
   addToCart,
   increaseQuantity,
   decreaseQuantity,
   removeFromCart,
+  clearCart,
   type CartState,
 } from "./cart/cartSlice";
 
@@ -24,7 +27,8 @@ cartListener.startListening({
     addToCart,
     increaseQuantity,
     decreaseQuantity,
-    removeFromCart
+    removeFromCart,
+    clearCart,
   ),
 
   effect: (_, listenerApi) => {
@@ -53,6 +57,8 @@ export const store = configureStore({
     auth: authReducer,
     events: eventsReducer,
     cart: cartReducer,
+    payments: paymentsReducer,
+    users: usersReducer,
   },
 
   middleware: (getDefaultMiddleware) =>

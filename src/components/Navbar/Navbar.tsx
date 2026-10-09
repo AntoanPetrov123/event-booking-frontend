@@ -55,6 +55,14 @@ const Navbar = () => {
         <div className="navbar__actions">
           {isAuthenticated ? (
             <>
+            <NavLink
+                to="/user/tickets"
+                className={({ isActive }) =>
+                  isActive ? "navbar__link active" : "navbar__link"
+                }
+              >
+                Tickets
+              </NavLink>
               <NavLink
                 to="/user/cart"
                 className={({ isActive }) =>
