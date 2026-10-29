@@ -104,6 +104,15 @@ const initialState: EventsState = {
         loading: false,
         error: null,
       },
+      adminEvents: {
+        data: [],
+        total: null,
+        page: null,
+        itemsPerPage: null,
+        totalPages: null,
+        loading: false,
+        error: null,
+      }
     },
   },
   loading: false,

@@ -14,6 +14,8 @@ type AuthState = {
   user: User | null;
   accessToken: string | null;
   isAuthenticated: boolean;
+  isAdmin: boolean;
+  authChecked: boolean;
   loading: boolean;
   error: string | null;
 };
@@ -22,6 +24,8 @@ const initialState: AuthState = {
   user: null,
   accessToken: localStorage.getItem("accessToken"),
   isAuthenticated: !!localStorage.getItem("accessToken"),
+  isAdmin: false,
+  authChecked: false,
   loading: false,
   error: null,
 };
@@ -35,6 +39,7 @@ const authSlice = createSlice({
       state.user = null;
       state.accessToken = null;
       state.isAuthenticated = false;
+      state.isAdmin = false;
 
       localStorage.removeItem("accessToken");
     },
@@ -53,6 +58,7 @@ const authSlice = createSlice({
         state.user = action.payload.user;
         state.accessToken = action.payload.accessToken;
         state.isAuthenticated = true;
+        state.isAdmin = action.payload.user.role === "ADMIN";
 
         localStorage.setItem(
           "accessToken",
@@ -69,6 +75,7 @@ const authSlice = createSlice({
         state.user = action.payload.user;
         state.accessToken = action.payload.accessToken;
         state.isAuthenticated = true;
+        state.isAdmin = action.payload.user?.role === 'ADMIN';
 
         localStorage.setItem(
           "accessToken",
@@ -77,14 +84,20 @@ const authSlice = createSlice({
       })
       
       .addCase(checkAuth.fulfilled, (state, action) => {
+        console.log(action.payload.role, 'kakakakaka');
+        
         state.user = action.payload;
         state.isAuthenticated = true;
+        state.isAdmin = action.payload.role === "ADMIN";
+        state.authChecked = true; 
       })
       
       .addCase(checkAuth.rejected, (state) => {
         state.user = null;
         state.accessToken = null;
         state.isAuthenticated = false;
+        state.isAdmin = false;
+        state.authChecked = true;
       
         localStorage.removeItem("accessToken");
       });

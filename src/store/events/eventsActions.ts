@@ -4,10 +4,11 @@ import { apolloClient } from "../../graphql/client";
 import { GET_EVENT, GET_EVENTS } from "../../graphql/queries/events.ts";
 
 type GetEventsFilter = {
-  city: string;
-  hall: string;
-  dateFrom: string;
-  dateTo: string;
+  city?: string | null;
+  hall?: string | null;
+  status?: string | null;
+  dateFrom?: string | null;
+  dateTo?: string | null;
 };
 
 type GetEventsPagination = {
@@ -27,14 +28,14 @@ type GetEventsPayload = {
 export const getEvent = createAsyncThunk(
   "events/getEvent",
   async (id: number) => {
-    const { data }  = await apolloClient.query({
+    const { data } = await apolloClient.query({
       query: GET_EVENT,
       variables: {
         id,
       },
       fetchPolicy: "network-only",
     });
-  
+
     return data?.getEvent;
   }
 );
@@ -42,14 +43,14 @@ export const getEvent = createAsyncThunk(
 export const getEvents = createAsyncThunk(
   "events/getEvents",
   async (payload: GetEventsPayload) => {
-    const { data }  = await apolloClient.query({
+    const { data } = await apolloClient.query({
       query: GET_EVENTS,
       variables: {
         payload,
       },
       fetchPolicy: "network-only",
     });
-    
+
     return data?.getEvents;
   }
 );

@@ -41,6 +41,7 @@ export const GET_EVENTS = gql`
         startTime
         endTime
         image
+        status
       }
       total
       page

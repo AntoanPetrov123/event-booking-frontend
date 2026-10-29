@@ -13,15 +13,15 @@ const Navbar = () => {
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
 
-  const { isAuthenticated, user } = useSelector(
+  const { isAuthenticated, isAdmin, user } = useSelector(
     (state: RootState) => state.auth
   );
 
   const handleLogout = () => {
     dispatch(logout());
-  
+
     dispatch(resetCartState());
-  
+
     navigate("/login");
   };
 
@@ -55,7 +55,18 @@ const Navbar = () => {
         <div className="navbar__actions">
           {isAuthenticated ? (
             <>
-            <NavLink
+              {isAdmin && (
+                <NavLink
+                  to="/admin/dashboard"
+                  className={({ isActive }) =>
+                    isActive ? "navbar__link active" : "navbar__link"
+                  }
+                >
+                  Dashboard
+                </NavLink>
+              )}
+
+              <NavLink
                 to="/user/tickets"
                 className={({ isActive }) =>
                   isActive ? "navbar__link active" : "navbar__link"
@@ -63,6 +74,7 @@ const Navbar = () => {
               >
                 Tickets
               </NavLink>
+
               <NavLink
                 to="/user/cart"
                 className={({ isActive }) =>
@@ -71,30 +83,20 @@ const Navbar = () => {
               >
                 Cart
               </NavLink>
-              <span className="navbar__user">
-                {user?.firstName}
-              </span>
 
-              <CustomButton
-                variant="secondary"
-                onClick={handleLogout}
-              >
+              <span className="navbar__user">{user?.firstName}</span>
+
+              <CustomButton variant="secondary" onClick={handleLogout}>
                 Logout
               </CustomButton>
             </>
           ) : (
             <>
-              <CustomButton
-                to="/login"
-                variant="secondary"
-              >
+              <CustomButton to="/login" variant="secondary">
                 Login
               </CustomButton>
 
-              <CustomButton
-                to="/register"
-                variant="primary"
-              >
+              <CustomButton to="/register" variant="primary">
                 Register
               </CustomButton>
             </>
